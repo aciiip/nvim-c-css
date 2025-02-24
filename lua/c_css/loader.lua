@@ -7,7 +7,7 @@ M.init = function(path)
 	local dir = base_path .. "/" .. path
 	local contents = vim.split(vim.fn.glob(dir .. "/*"), "\n", { trimempty = true })
 
-	local allowed_ext = { "css", "scss" }
+	local allowed_ext = { "css" }
 
 	for _, item in pairs(contents) do
 		local ext = item:match("^.+%.(.+)$")
