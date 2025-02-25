@@ -1,12 +1,20 @@
-# Neovim Load CSS from external path
+# Neovim load CSS from external path
 
 Neovim Custom CSS Intellisense
 
-#### HTML id and class attribute completion for Neovim written in Lua.
+#### HTML id and class attribute completion for Neovim written in Lua
 
 ## ✨ Features
 
 - HTML `id` and `class` attribute completion.
+
+## 🎯 Usage
+
+- Install and Configure
+- Create a folder as you have configured in your project root
+- Download CSS files from CDN and place them in the folder you have created
+- Open nvim in your project root
+- Done, the autocomplete class should appear when you type in the file you have specified in the configuration
 
 ## ⚡️ Requirements
 
@@ -33,7 +41,7 @@ return require("lazy").setup({
                         documentation = {
                             auto_show = true, -- show documentation on select
                         },
-                        path = ".custom_css", -- will retrieve all css files inside "yourproject/.custom_css" folder
+                        path = ".c_css", -- will retrieve all css files inside "[current work directory]/.c_css" folder
                     },
                 },
             },
