@@ -15,10 +15,6 @@ M.init = function(path)
 			if ext == allowed then
 				table.insert(files, {
 					path = item,
-					fetched = false,
-					available = false,
-					file_name = item,
-					full_path = "",
 				})
 			end
 		end
