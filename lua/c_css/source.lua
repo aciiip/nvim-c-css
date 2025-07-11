@@ -28,13 +28,14 @@ end
 
 function source:is_available()
 	local bufnr = vim.api.nvim_get_current_buf()
-	local buftype = vim.api.nvim_get_option_value("buftype", { buf = bufnr })
 
+	local buftype = vim.api.nvim_get_option_value("buftype", { buf = bufnr })
 	if buftype ~= "" then
 		return false
 	end
 
-	local current_node = ts.get_node({ bufnr = 0, lang = "html" })
+	local ts_utils = require("nvim-treesitter.ts_utils")
+	local current_node = ts_utils.get_node_at_cursor()
 	if not current_node then
 		return false
 	end
@@ -43,12 +44,6 @@ function source:is_available()
 
 	-- grab the file extension
 	local ext = vim.fn.expand("%:t:e")
-
-	-- prevent autocompletion for .js file
-	if vim.fn.expand("%:t:e") == "js" then
-		return false
-	end
-
 	if not utils.isLangEnabled(ext, config.enable_on) then
 		return false
 	end
@@ -57,29 +52,28 @@ function source:is_available()
 
 	if store.has(bufnr) then
 		while current_node do
-			if utils.isLangEnabled(ext, config.enable_on) then
-				if current_node:type() == "attribute" then
-					local attr_name_node = current_node:child(0)
-					if attr_name_node and attr_name_node:type() == "attribute_name" then
-						local identifier_name = ts.get_node_text(attr_name_node, 0)
-						if
-							identifier_name
-							and (
-								identifier_name == "className"
-								or identifier_name == "class"
-								or identifier_name == "id"
-							)
-						then
-							current_selector = identifier_name
-							is_available = true
-						end
-						break
+			if current_node:type() == "attribute" then
+				local attr_name_node = current_node:child(0)
+				if attr_name_node and attr_name_node:type() == "attribute_name" then
+					local identifier_name = ts.get_node_text(attr_name_node, 0)
+					if
+						identifier_name
+						and (
+							identifier_name == "className"
+							or identifier_name == "class"
+							or identifier_name == "id"
+						)
+					then
+						current_selector = identifier_name
+						is_available = true
 					end
-				end
-				current_node = current_node:parent()
-				if not current_node then
 					break
 				end
+			end
+
+			current_node = current_node:parent()
+			if not current_node then
+				break
 			end
 		end
 
