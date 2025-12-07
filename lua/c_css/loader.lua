@@ -7,7 +7,9 @@ M.init = function(bufnr, path, current_files)
 
 	local base_path = vim.fn.getcwd()
 	local dir = base_path .. "/" .. path
-	local contents = vim.split(vim.fn.glob(dir .. "/*"), "\n", { trimempty = true })
+
+	-- local contents = vim.split(vim.fn.glob(dir .. "/*"), "\n", { trimempty = true })
+	local contents = vim.fn.glob(dir .. "/**", false, true);
 
 	local allowed_ext = { "css" }
 
