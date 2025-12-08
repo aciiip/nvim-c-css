@@ -16,16 +16,15 @@ if config.enable_on ~= nil then
 	end
 end
 
--- local files = {}
+local files = {}
 
 function M:setup()
 	require("cmp").register_source(source_name, source)
 
-	vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+	vim.api.nvim_create_autocmd({ "BufWinEnter", "BufWritePre", "WinEnter" }, {
 		pattern = enable_on_dto,
 		callback = function(event)
-			-- files = loader.init(event.buf, config.path, files)
-			local files = loader.init(event.buf, config.path, {})
+			files = loader.init(event.buf, config.path, files)
 			reader.init(event.buf, files)
 		end,
 	})

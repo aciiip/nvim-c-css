@@ -12,7 +12,7 @@ Neovim Custom CSS Intellisense
 
 - Install and Configure
 - Create a folder as you have configured in your project root
-- Download CSS files from CDN and place them in the folder you have created
+- Download CSS files from CDN and place them in the folder you have created or create a symbolic link to your css files
 - Open nvim in your project root
 - Done, the autocomplete class should appear when you type in the file you have specified in the configuration
 
@@ -37,11 +37,12 @@ return require("lazy").setup({
                     name = "c_css",
                     option = {
                         enable_on = { "html" }, -- html is enabled by default
-                        notify = false,
+                        notify = false, -- show notification when css file is loaded
                         documentation = {
                             auto_show = true, -- show documentation on select
                         },
                         path = ".c_css", -- will retrieve all css files inside "[current work directory]/.c_css" folder
+                        list_icon = "○", -- bullet icon
                     },
                 },
             },
@@ -60,6 +61,7 @@ option = {
         auto_show = true,
     },
     path = ".c_css",
+    list_icon = "-",
 }
 ```
 

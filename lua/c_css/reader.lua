@@ -11,8 +11,12 @@ M.init = function(bufnr, files)
 		store.set(bufnr, "selectors", nil)
 	end
 
+	local loaded = {}
+	local pending = 0
+
 	for _, file in pairs(files) do
 		if not readed then
+			pending = pending + 1
 			utils.readFile(file.path, function(data)
 				local extracted_selectors = extractor.selectors(data, file.path)
 				local selectors = store.get(bufnr, "selectors") or {
@@ -25,11 +29,19 @@ M.init = function(bufnr, files)
 
 				store.set(bufnr, "selectors", selectors)
 				store.set(bufnr, "readed", true)
+				table.insert(loaded, file.path)
 
-				if config.config.notify then
-					vim.schedule(function()
-						vim.notify(file.path, vim.log.levels.INFO, { title = "C_CSS Loaded" })
-					end)
+				pending = pending - 1
+				if pending == 0 then
+					if config.config.notify and next(loaded) ~= nil then
+						local result = {}
+						for _, value in pairs(loaded) do
+							table.insert(result, config.config.list_icon .. " " .. tostring(value))
+						end
+						vim.schedule(function()
+							vim.notify(table.concat(result, "\n"), vim.log.levels.INFO, { title = "C_CSS Loaded" })
+						end)
+					end
 				end
 			end)
 		end

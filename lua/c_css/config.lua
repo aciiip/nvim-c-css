@@ -8,6 +8,7 @@ M.default = {
 		auto_show = true,
 	},
 	path = ".c_css",
+	list_icon = "-",
 }
 
 M.config = {}
